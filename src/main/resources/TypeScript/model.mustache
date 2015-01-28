@@ -1,0 +1,19 @@
+{{#models}}
+{{#model}}
+{{#description}}/**
+ * {{{description}}}
+ **/
+{{/description}}
+export interface {{classname}} {
+  {{#vars}}
+
+  {{#description}}/**
+   * {{{description}}}
+   **/
+  {{/description}}
+  {{name}}: {{{datatype}}};
+  {{/vars}}
+}
+
+{{/model}}
+{{/models}}
