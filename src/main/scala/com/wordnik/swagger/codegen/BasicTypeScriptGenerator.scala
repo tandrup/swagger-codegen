@@ -133,7 +133,6 @@ class BasicTypeScriptGenerator extends BasicGenerator {
     if (!obj.`type`.equals("string")) {
       obj.allowableValues match {
         case AllowableListValues(enumList,_) => {
-          System.out.println(obj);
           val outputDirectory = (destinationDir + File.separator + modelPackage.getOrElse("").replace(".", File.separator))
           val m = HashMap[String, AnyRef](
             "models" -> List(Map(

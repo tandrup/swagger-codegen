@@ -15,7 +15,7 @@ export enum {{classname}} {
  * {{{description}}}
  */
 {{/description}}
-export interface {{classname}} {
+export class {{classname}} {
   {{#vars}}
 
   {{#description}}/**
@@ -24,6 +24,12 @@ export interface {{classname}} {
   {{/description}}
   {{name}}: {{{datatype}}};
   {{/vars}}
+
+  constructor({{#vars}}{{name}}?: {{{datatype}}}{{#hasMore}}, {{/hasMore}}{{/vars}}) {
+    {{#vars}}
+    this.{{name}} = {{name}};
+    {{/vars}}
+  }
 }
 {{/enum}}
 
