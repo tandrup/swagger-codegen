@@ -1,19 +1,31 @@
 {{#models}}
 {{#model}}
-{{#description}}/**
+
+{{#enum}}
+export enum {{classname}} {
+{{#values}}
+  {{.}},
+{{/values}}
+}
+{{/enum}}
+
+
+{{^enum}}
+  {{#description}}/**
  * {{{description}}}
- **/
+ */
 {{/description}}
 export interface {{classname}} {
   {{#vars}}
 
   {{#description}}/**
    * {{{description}}}
-   **/
+   */
   {{/description}}
   {{name}}: {{{datatype}}};
   {{/vars}}
 }
+{{/enum}}
 
 {{/model}}
 {{/models}}

@@ -16,7 +16,11 @@
 
 package com.wordnik.swagger.codegen
 
+import java.io.File
+
 import com.wordnik.swagger.codegen.model._
+
+import scala.collection.immutable.HashMap
 
 object BasicTypeScriptGenerator extends BasicTypeScriptGenerator {
   def main(args: Array[String]) = generateClient(args)
@@ -46,9 +50,9 @@ class BasicTypeScriptGenerator extends BasicGenerator {
    * variable declarations.
    */
   override def typeMapping = Map(
-    "Array" -> "array",
-    "array" -> "array",
-    "List" -> "array",
+    "Array" -> "Array",
+    "array" -> "Array",
+    "List" -> "Array",
     "boolean" -> "boolean",
     "string" -> "string",
     "int" -> "number",
@@ -105,14 +109,6 @@ class BasicTypeScriptGenerator extends BasicGenerator {
     super.toApiName(paramName)
   }
 
-  // response classes
-  override def processResponseClass(responseClass: String): Option[String] = {
-    responseClass match {
-      case "void" => None
-      case e: String => Some(typeMapping.getOrElse(e, e.replaceAll("\\[", "<").replaceAll("\\]", ">")))
-    }
-  }
-
   override def processResponseDeclaration(responseClass: String): Option[String] = {
     responseClass match {
       case "void" => None
@@ -129,27 +125,39 @@ class BasicTypeScriptGenerator extends BasicGenerator {
     }
   }
 
-  override def toDeclaredType(dt: String): String = {
-    System.out.println(dt);
-    val declaredType = dt.indexOf("[") match {
-      case -1 => dt
-      case n: Int => {
-        if (dt.substring(0, n) == "Array")
-          "List" + dt.substring(n).replaceAll("\\[", "<").replaceAll("\\]", ">")
-        else if (dt.substring(0, n) == "Set")
-          "Set" + dt.substring(n).replaceAll("\\[", "<").replaceAll("\\]", ">")
-        else dt.replaceAll("\\[", "<").replaceAll("\\]", ">")
-      }
-    }
-    typeMapping.getOrElse(declaredType, declaredType)
-  }
+  var enums = List[Map[String,AnyRef]]()
 
   override def toDeclaration(obj: ModelProperty) = {
     var declaredType = toDeclaredType(obj.`type`)
 
+    if (!obj.`type`.equals("string")) {
+      obj.allowableValues match {
+        case AllowableListValues(enumList,_) => {
+          System.out.println(obj);
+          val outputDirectory = (destinationDir + File.separator + modelPackage.getOrElse("").replace(".", File.separator))
+          val m = HashMap[String, AnyRef](
+            "models" -> List(Map(
+              "model" -> HashMap[String, AnyRef](
+                "enum" -> Boolean.box(true),
+                "classname" -> obj.`type`,
+                "values" -> enumList,
+                "classVarName" -> ""
+              )
+            )),
+            "outputDirectory" -> outputDirectory,
+            "filename" -> toModelFilename(obj.`type`)
+          );
+          enums = m :: enums;
+        }
+        case _ => {
+          // do nothing
+        }
+      }
+    }
+
     val defaultValue = toDefaultValue(declaredType, obj)
     declaredType match {
-      case "array" => {
+      case "Array" => {
         val inner = {
           obj.items match {
             case Some(items) => items.ref.getOrElse(items.`type`)
@@ -164,6 +172,12 @@ class BasicTypeScriptGenerator extends BasicGenerator {
       case _ =>
     }
     (declaredType, defaultValue)
+  }
+
+  override def prepareModelMap(models: Map[String, Model]): List[Map[String, AnyRef]] = {
+    val modelList = super.prepareModelMap(models);
+    val fullList = enums ::: modelList;
+    return fullList;
   }
 
   override def escapeReservedWord(word: String) = {
