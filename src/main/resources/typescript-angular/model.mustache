@@ -1,0 +1,37 @@
+{{#models}}
+{{#model}}
+
+{{#enum}}
+export enum {{classname}} {
+{{#values}}
+  {{.}},
+{{/values}}
+}
+{{/enum}}
+
+
+{{^enum}}
+  {{#description}}/**
+ * {{{description}}}
+ */
+{{/description}}
+export class {{classname}} {
+  {{#vars}}
+
+  {{#description}}/**
+   * {{{description}}}
+   */
+  {{/description}}
+  {{name}}: {{{datatype}}};
+  {{/vars}}
+
+  constructor({{#vars}}{{name}}?: {{{datatype}}}{{#hasMore}}, {{/hasMore}}{{/vars}}) {
+    {{#vars}}
+    this.{{name}} = {{name}};
+    {{/vars}}
+  }
+}
+{{/enum}}
+
+{{/model}}
+{{/models}}

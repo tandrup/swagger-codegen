@@ -1,0 +1,64 @@
+/* tslint:disable:no-unused-variable */
+
+{{#operations}}
+module dco_api_{{classname}} {
+{{#description}}
+/**
+* {{&description}}
+*/
+{{/description}}
+class {{classname}} {
+    private basePath = '{{basePath}}';
+
+    static $inject: string[] = ['$http'];
+
+    constructor(private $http: ng.IHttpService, basePath?: string) {
+        if (basePath) {
+            this.basePath = basePath;
+        }
+    }
+
+  {{#operation}}
+  public {{nickname}} ({{#allParams}}{{paramName}}: {{{dataType}}}{{#hasMore}}, {{/hasMore}}{{/allParams}} ) : ng.IHttpPromise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
+    var path = this.basePath + '{{path}}';
+
+    {{#pathParams}}
+    path = path.replace('{' + '{{paramName}}' + '}', {{paramName}});
+    {{/pathParams}}
+
+    var queryParameters: any = {};
+    var headers: any = {};
+
+    {{#requiredParamCount}}
+    // verify required params are set
+    if ({{/requiredParamCount}}{{#requiredParams}} !{{paramName}} {{#hasMore}}|| {{/hasMore}}{{/requiredParams}}{{#requiredParamCount}}) {
+       throw new Error('Missing required parameter: {{&paramName}}');
+    }
+    {{/requiredParamCount}}
+
+    {{#queryParams}}if ('{{paramName}}' !== undefined) {
+        queryParameters['{{paramName}}'] = {{paramName}};
+    }
+    {{/queryParams}}
+
+    {{#headerParams}}headerParams['{{paramName}}'] = {{paramName}};
+    {{/headerParams}}
+
+    return this.$http({
+        method: '{{httpMethod}}',
+        url: path,
+        json: true,
+        {{#bodyParam}}data: body,
+        {{/bodyParam}}
+        params: queryParameters,
+        headers: headers
+    });
+  }
+
+  {{/operation}}
+}
+
+angular.module('dco_api_{{classname}}', ['$http'])
+       .service({{classname}});
+}
+{{/operations}}
