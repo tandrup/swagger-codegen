@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 {{#operations}}
-module dco_api_{{classname}} {
+module {{package}} {
 {{#description}}
 /**
 * {{&description}}
@@ -19,7 +19,7 @@ class {{classname}} {
     }
 
   {{#operation}}
-  public {{nickname}} ({{#allParams}}{{paramName}}: {{{dataType}}}{{#hasMore}}, {{/hasMore}}{{/allParams}} ) : ng.IHttpPromise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}void{{/returnType}}> {
+  public {{nickname}} ({{#allParams}}{{paramName}}: {{{dataType}}}{{#hasMore}}, {{/hasMore}}{{/allParams}} ) : ng.IHttpPromise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}{}{{/returnType}}> {
     var path = this.basePath + '{{path}}';
 
     {{#pathParams}}
@@ -58,7 +58,7 @@ class {{classname}} {
   {{/operation}}
 }
 
-angular.module('dco_api_{{classname}}', ['$http'])
-       .service({{classname}});
+angular.module('{{package}}_{{classname}}', ['$http'])
+       .service('{{classname}}', {{classname}});
 }
 {{/operations}}

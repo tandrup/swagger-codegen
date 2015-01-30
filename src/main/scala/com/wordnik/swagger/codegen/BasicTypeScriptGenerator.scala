@@ -86,10 +86,10 @@ class BasicTypeScriptGenerator extends BasicGenerator {
     "super", "while")
 
   // package for models
-  override def modelPackage: Option[String] = Some("api.model")
+  override def modelPackage: Option[String] = Some("dco_api_model")
 
   // package for api classes
-  override def apiPackage: Option[String] = Some("api")
+  override def apiPackage: Option[String] = Some("dco_api")
 
   // file suffix
   override def fileSuffix = ".ts"
@@ -143,6 +143,7 @@ class BasicTypeScriptGenerator extends BasicGenerator {
                 "classVarName" -> ""
               )
             )),
+            "package" -> modelPackage,
             "outputDirectory" -> outputDirectory,
             "filename" -> toModelFilename(obj.`type`)
           );
