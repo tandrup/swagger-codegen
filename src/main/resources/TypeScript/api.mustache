@@ -47,6 +47,8 @@ export class {{classname}} {
         method: '{{httpMethod}}',
         uri: path,
         json: true,
+        {{#bodyParam}}body: body,
+        {{/bodyParam}}
         auth: {
             username: this.username, password: this.password
         }
