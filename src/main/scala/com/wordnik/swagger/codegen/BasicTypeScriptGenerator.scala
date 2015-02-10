@@ -99,9 +99,11 @@ class BasicTypeScriptGenerator extends BasicGenerator {
     super.toVarName(paramName)
   }
 
+  override def toModelFilename(name: String) = name.capitalize
+
   override def toApiFilename(name: String): String = {
     val paramName = name.replaceAll("[^a-zA-Z0-9_]","")
-    super.toApiFilename(paramName)
+    super.toApiFilename(paramName).capitalize
   }
 
   override def toApiName(name: String): String = {

@@ -16,4 +16,9 @@ class BasicTypeScriptAngularGenerator extends BasicTypeScriptGenerator {
 
   // package for api classes
   override def apiPackage: Option[String] = Some("dco_api")
+
+  // supporting classes
+  override def supportingFiles =
+    List(
+      ("api.d.mustache", destinationDir + java.io.File.separator + apiPackage.get + java.io.File.separator, "api.d.ts"))
 }
