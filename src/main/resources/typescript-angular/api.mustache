@@ -1,13 +1,15 @@
-/* tslint:disable:no-unused-variable */
+/* tslint:disable:no-unused-variable member-ordering */
 
 {{#operations}}
 module {{package}} {
+'use strict';
+
 {{#description}}
 /**
 * {{&description}}
 */
 {{/description}}
-class {{classname}} {
+export class {{classname}} {
     private basePath = '{{basePath}}';
 
     static $inject: string[] = ['$http'];
