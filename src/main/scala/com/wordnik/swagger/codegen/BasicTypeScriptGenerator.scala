@@ -163,7 +163,7 @@ class BasicTypeScriptGenerator extends BasicGenerator {
                 "enum" -> Boolean.box(true),
                 "classname" -> obj.`type`,
                 "values" -> enumList,
-                "classVarName" -> ""
+                "classVarName" -> obj.`type`
               )
             )),
             "package" -> modelPackage,
