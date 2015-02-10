@@ -17,7 +17,7 @@ export class {{classname}} {
 
   {{#operation}}
   public {{nickname}} ({{#allParams}}{{paramName}}: {{{dataType}}}{{#hasMore}}, {{/hasMore}}{{/allParams}} ) : Promise<{ response: http.ClientResponse; {{#returnType}}body: {{{returnType}}}; {{/returnType}} }> {
-    var path = this.url + '/' + this.basePath + '{{path}}';
+    var path = this.url + this.basePath + '{{path}}';
 
     {{#pathParams}}
     path = path.replace('{' + '{{paramName}}' + '}', {{paramName}});
