@@ -109,6 +109,13 @@ class BasicTypeScriptGenerator extends BasicGenerator {
     super.toApiName(paramName)
   }
 
+  override def processResponseClass(responseClass: String): Option[String] = {
+    responseClass match {
+      case "void" => None
+      case e: String => Some(typeMapping.getOrElse(e, e.capitalize.replaceAll("\\[", "<").replaceAll("\\]", ">")))
+    }
+  }
+
   override def processResponseDeclaration(responseClass: String): Option[String] = {
     responseClass match {
       case "void" => None
@@ -120,12 +127,26 @@ class BasicTypeScriptGenerator extends BasicGenerator {
           }
           case _ => e
         }
-        Some(typeMapping.getOrElse(t, t.replaceAll("\\[", "<").replaceAll("\\]", ">")))
+        Some(typeMapping.getOrElse(t, t.capitalize.replaceAll("\\[", "<").replaceAll("\\]", ">")))
       }
     }
   }
 
   var enums = List[Map[String,AnyRef]]()
+
+  override def toDeclaredType(dt: String): String = {
+    val declaredType = dt.indexOf("[") match {
+      case -1 => dt
+      case n: Int => {
+        if (dt.substring(0, n) == "Array")
+          "Array" + dt.substring(n).replaceAll("\\[", "<").replaceAll("\\]", ">")
+        else if (dt.substring(0, n) == "Set")
+          "Set" + dt.substring(n).replaceAll("\\[", "<").replaceAll("\\]", ">")
+        else dt.replaceAll("\\[", "<").replaceAll("\\]", ">")
+      }
+    }
+    typeMapping.getOrElse(declaredType, declaredType.capitalize)
+  }
 
   override def toDeclaration(obj: ModelProperty) = {
     var declaredType = toDeclaredType(obj.`type`)
