@@ -116,6 +116,8 @@ abstract class BasicGenerator extends CodegenConfig with PathUtil {
     new SwaggerSpecValidator(doc, apis).validate()
 
     val allModels = new HashMap[String, Model]
+    allModels ++= CoreUtils.extractAllModels(apis)
+
     val operations = extractApiOperations(apis, allModels)
     val operationMap: Map[(String, String), List[(String, Operation)]] =
       groupOperationsToFiles(operations)
