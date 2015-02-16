@@ -33,7 +33,7 @@ export class {{classname}} {
     }
     {{/requiredParamCount}}
 
-    {{#queryParams}}if ('{{paramName}}' !== undefined) {
+    {{#queryParams}}if ({{paramName}} !== undefined) {
         queryParameters['{{paramName}}'] = {{paramName}};
     }
     {{/queryParams}}
