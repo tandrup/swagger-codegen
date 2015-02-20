@@ -23,7 +23,7 @@ export class {{classname}} {
     }
 
   {{#operation}}
-  public {{nickname}} ({{#allParams}}{{paramName}}: {{{dataType}}}{{#hasMore}}, {{/hasMore}}{{/allParams}} ) : ng.IHttpPromise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}{}{{/returnType}}> {
+  public {{nickname}} ({{#allParams}}{{paramName}}: {{{dataType}}}, {{/allParams}} extraHttpRequestParams?: any ) : ng.IHttpPromise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}{}{{/returnType}}> {
     var path = this.basePath + '{{path}}';
 
     {{#pathParams}}
@@ -48,15 +48,25 @@ export class {{classname}} {
     {{#headerParams}}headerParams['{{paramName}}'] = {{paramName}};
     {{/headerParams}}
 
-    return this.$http({
-        method: '{{httpMethod}}',
-        url: path,
-        json: true,
-        {{#bodyParam}}data: body,
-        {{/bodyParam}}
-        params: queryParameters,
-        headers: headers
-    });
+    var httpRequestParams: any = {
+      method: '{{httpMethod}}',
+      url: path,
+      json: true,
+      {{#bodyParam}}data: body,
+      {{/bodyParam}}
+      params: queryParameters,
+      headers: headers
+    };
+
+    if (extraHttpRequestParams) {
+      for (var k in extraHttpRequestParams){
+        if (extraHttpRequestParams.hasOwnProperty(k)) {
+          httpRequestParams[k] = extraHttpRequestParams[k];
+        }
+      }
+    }
+
+    return this.$http(httpRequestParams);
   }
 
   {{/operation}}
