@@ -205,7 +205,7 @@ class BasicTypeScriptGenerator extends BasicGenerator {
 
   override def escapeReservedWord(word: String) = {
     if (reservedWords.contains(word)) 
-      throw new Exception("reserved word " + "\"" + word + "\" not allowed")
+      word
     else word
   }
 }
