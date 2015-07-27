@@ -8,7 +8,7 @@
     "test": "tsc"
   },
   "author": "Mads M. Tandrup",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "angular": "^1.4.3"
   },
