@@ -5,7 +5,7 @@
   "main": "api.js",
   "scripts": {
     "postinstall": "tsd reinstall --overwrite",
-    "test": "tsc",
+    "test": "tsc && karma start test/karma.conf.js --single-run",
     "clean": "rm -Rf node_modules/ typings/ *.js"
   },
   "author": "Mads M. Tandrup",
@@ -14,6 +14,14 @@
     "angular": "^1.4.3"
   },
   "devDependencies": {
+    "angular-mocks": "^1.4.3",
+    "chai": "^3.2.0",
+    "karma": "^0.13.3",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.0",
+    "mocha": "^2.2.5",
+    "phantomjs": "^1.9.17",
     "tsd": "^0.6.3",
     "typescript": "^1.5.3"
   }

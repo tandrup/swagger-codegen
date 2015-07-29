@@ -13,6 +13,8 @@
         "API/Client/PetApi.ts",
         "API/Client/Tag.ts",
         "API/Client/UserApi.ts",
-        "typings/tsd.d.ts"
+        "typings/tsd.d.ts",
+        "app.ts",
+        "test/spec/PetApi.ts"
     ]
 }
